@@ -5,7 +5,7 @@
   programs.home-manager.enable = true;
 
   # Set to the release first activated against; don't bump it after that.
-  home.stateVersion = lib.mkDefault "25.11";
+  home.stateVersion = lib.mkDefault "26.05";
 
   # vim as the default editor everywhere.
   home.packages = [ pkgs.vim ];
