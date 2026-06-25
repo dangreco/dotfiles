@@ -5,6 +5,31 @@ for managing user-level dotfiles on any OS Nix runs on (non-NixOS Linux, macOS, 
 No NixOS or nix-darwin required. Config is split into per-identity profiles (`dan`,
 `work`) built from feature modules you toggle on and off.
 
+## Install from scratch
+
+On a fresh machine, one line pulls everything from GitHub — no clone needed:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/dangreco/dotfiles/main/install.sh | sh
+```
+
+It installs Nix via the [Determinate Systems installer](https://install.determinate.systems/nix)
+if it's missing (this also works on ostree/atomic distros — Fedora Silverblue,
+Kinoite, Bluefin — where the Nix store is set up behind a systemd mount),
+detects your system, prompts for a profile, then applies it.
+
+Skip the prompt with an arg or env var:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/dangreco/dotfiles/main/install.sh | sh -s -- work
+# or
+PROFILE=work curl -fsSL https://raw.githubusercontent.com/dangreco/dotfiles/main/install.sh | sh
+```
+
+On a brand-new ostree install the store mount may need a reboot to activate; if
+the script says so, reboot (or `sudo systemctl start nix.mount nix-daemon`) and
+re-run it.
+
 ## Activate
 
 With home-manager already installed:
