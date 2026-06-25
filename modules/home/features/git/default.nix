@@ -26,14 +26,17 @@ in
       enable = true;
       lfs.enable = cfg.lfs.enable;
 
-      # Syntax-highlighted diffs.
-      delta = {
-        enable = true;
-        options.navigate = true;
+      settings.user = {
+        name = lib.mkIf (cfg.userName != null) cfg.userName;
+        email = lib.mkIf (cfg.userEmail != null) cfg.userEmail;
       };
+    };
 
-      userName = lib.mkIf (cfg.userName != null) cfg.userName;
-      userEmail = lib.mkIf (cfg.userEmail != null) cfg.userEmail;
+    # Syntax-highlighted diffs.
+    programs.delta = {
+      enable = true;
+      enableGitIntegration = true;
+      options.navigate = true;
     };
   };
 }
