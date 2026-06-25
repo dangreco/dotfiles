@@ -1,0 +1,4 @@
+# Per-line nested attribute assignment (e.g. `features.git.enable = true;`
+# alongside `features.fish.enable = true;`) is the documented convention in this
+# repo's README, so don't flag it as a repeated key.
+disabled = ["repeated_keys"]
