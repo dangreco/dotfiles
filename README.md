@@ -47,6 +47,29 @@ First time, without home-manager installed:
 nix run github:nix-community/home-manager -- switch --flake .#dan@x86_64-linux
 ```
 
+## Updating
+
+A background service checks `github:dangreco/dotfiles` for a newer commit every
+6 hours (and shortly after login). When one is available, interactive `fish`
+sessions prompt on launch:
+
+```
+:: dotfiles update available (a1b2c3d → v1.2.0).
+Update now? [y/N]
+```
+
+Each side is a **release tag** if that commit is tagged (e.g. `v1.2.0`), else a
+short commit SHA. Answering `y` applies the update; `N` (or Enter) snoozes the
+prompt for 6 hours so new tabs don't re-nag. Update on demand at any time:
+
+```bash
+dotfiles-update
+```
+
+which runs `home-manager switch --refresh --flake github:dangreco/dotfiles#<profile>@<system>`.
+Local development builds (a dirty/checkout tree, `.#dan@...`) have no baked
+revision, so the check is a no-op and never nags.
+
 ## Profiles
 
 Every profile is generated for every supported system, keyed `<profile>@<system>`.
@@ -64,7 +87,7 @@ Supported systems: `x86_64-linux`, `aarch64-linux`, `aarch64-darwin`, `x86_64-da
 flake.nix              # inputs + profile registry (flake-parts)
 lib/                   # systems list + mkHome / mkHomes (profile x system matrix)
 modules/home/          # feature modules you toggle on and off
-  features/{cli,direnv,fish,git}/
+  features/{cli,direnv,fish,git,update}/
 profiles/              # identities: flip feature toggles, set values
 ```
 

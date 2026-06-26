@@ -5,5 +5,6 @@
     ./direnv
     ./fish
     ./git
+    ./update
   ];
 }

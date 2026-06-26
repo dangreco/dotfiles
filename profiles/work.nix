@@ -9,4 +9,9 @@ _: {
   features.fish.enable = true;
   features.direnv.enable = true;
   features.cli.enable = true;
+
+  features.update = {
+    enable = true;
+    profile = "work";
+  };
 }
