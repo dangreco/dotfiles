@@ -52,6 +52,12 @@ in
       "org/gnome/shell" = {
         favorite-apps = cfg.favoriteApps;
       };
+
+      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+        name = "Open Terminal";
+        command = "ptyxis --new-window";
+        binding = "<Super>Return";
+      };
     };
   };
 }
