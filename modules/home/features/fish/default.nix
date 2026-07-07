@@ -12,6 +12,11 @@ in
       enable = true;
       # Disable the startup greeting.
       interactiveShellInit = "set -g fish_greeting";
+      shellInit = ''
+        if test -f /nix/var/nix/profiles/default/etc/profile.d/nix.fish
+          source /nix/var/nix/profiles/default/etc/profile.d/nix.fish
+        end
+      '';
     };
   };
 }
