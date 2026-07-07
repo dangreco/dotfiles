@@ -55,6 +55,31 @@ if [ -f /run/ostree-booted ]; then
 fi
 
 # ---------------------------------------------------------------------------
+# Transient root (ostree/composefs).
+#
+# On composefs-backed atomic distros `/` is read-only. A *transient* root makes
+# `/` a writable overlay that resets each boot. It's configured via
+# prepare-root.conf and baked into the initramfs with `rpm-ostree initramfs-etc`
+# (no dracut run). It only takes effect after a reboot, so we stage it and ask
+# the user to reboot, then bail — the next run continues once it's active.
+# ---------------------------------------------------------------------------
+if [ "$IS_OSTREE" -eq 1 ] && [ ! -w / ]; then
+  PREPARE_ROOT=/etc/ostree/prepare-root.conf
+  if ! grep -qs 'transient[[:space:]]*=[[:space:]]*true' "$PREPARE_ROOT"; then
+    info "Enabling transient root ..."
+    sudo tee "$PREPARE_ROOT" >/dev/null <<'EOL'
+[composefs]
+enabled = yes
+[root]
+transient = true
+EOL
+    sudo rpm-ostree initramfs-etc --track="$PREPARE_ROOT"
+  fi
+  warn "Transient root is staged but not active — reboot, then re-run this script."
+  exit 1
+fi
+
+# ---------------------------------------------------------------------------
 # Make `nix` available on PATH in the current shell after an install.
 # ---------------------------------------------------------------------------
 load_nix() {
@@ -64,6 +89,7 @@ load_nix() {
     # shellcheck disable=SC1090
     [ -e "$p" ] && . "$p"
   done
+  return 0
 }
 
 # ---------------------------------------------------------------------------
