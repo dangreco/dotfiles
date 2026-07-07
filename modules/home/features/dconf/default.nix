@@ -48,6 +48,10 @@ in
       "org/gnome/desktop/wm/preferences" = {
         button-layout = ":minimize,maximize,close";
       };
+
+      "org/gnome/shell" = {
+        favorite-apps = cfg.favoriteApps;
+      };
     };
   };
 }
