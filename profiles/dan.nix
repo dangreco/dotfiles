@@ -6,6 +6,11 @@ _: {
     lfs.enable = true;
   };
 
+  features.avatar = {
+    enable = true;
+    username = "dangreco";
+  };
+
   features.fish.enable = true;
   features.direnv.enable = true;
   features.cli.enable = true;

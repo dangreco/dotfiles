@@ -1,6 +1,7 @@
 { ... }:
 {
   imports = [
+    ./avatar
     ./cli
     ./dconf
     ./direnv
