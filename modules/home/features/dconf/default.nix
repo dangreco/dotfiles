@@ -57,10 +57,27 @@ in
         move-to-center = [ "<Super>c" ];
       };
 
+      # GNOME only activates a custom shortcut once its path is registered in
+      # this list; writing custom0's fields alone is inert without it.
+      "org/gnome/settings-daemon/plugins/media-keys" = {
+        custom-keybindings = [
+          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
+        ];
+      };
+
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
         name = "Open Terminal";
         command = "ptyxis --new-window";
         binding = "<Super>Return";
+      };
+
+      # ptyxis
+      "org/gnome/Ptyxis" = {
+        restore-session = false;
+        restore-window-size = false;
+        audible-bell = false;
+        visual-bell = false;
+        cursor-shape = "ibeam";
       };
     };
   };
