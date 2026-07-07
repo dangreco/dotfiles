@@ -53,6 +53,10 @@ in
         favorite-apps = cfg.favoriteApps;
       };
 
+      "org/gnome/desktop/wm/keybindings" = {
+        move-to-center = [ "<Super>c" ];
+      };
+
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
         name = "Open Terminal";
         command = "ptyxis --new-window";
