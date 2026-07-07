@@ -63,7 +63,7 @@ fi
 # (no dracut run). It only takes effect after a reboot, so we stage it and ask
 # the user to reboot, then bail — the next run continues once it's active.
 # ---------------------------------------------------------------------------
-if [ "$IS_OSTREE" -eq 1 ] && [ ! -w / ]; then
+if [ "$IS_OSTREE" -eq 1 ] && ! findmnt / | grep -q "overlay"; then
   PREPARE_ROOT=/etc/ostree/prepare-root.conf
   if ! grep -qs 'transient[[:space:]]*=[[:space:]]*true' "$PREPARE_ROOT"; then
     info "Enabling transient root ..."
