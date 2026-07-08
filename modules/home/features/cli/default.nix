@@ -15,7 +15,7 @@ in
     # ls/ll/la/lt aliases in any enabled shell (e.g. fish).
     programs.eza = {
       enable = true;
-      icons = "auto";
+      icons = "never";
       git = true;
     };
 
