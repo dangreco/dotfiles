@@ -16,16 +16,21 @@ let
   # same layered elevation GNOME gives its menus/dialogs (a crisp 1px CSD-style
   # ring + a tight contact shadow + a soft ambient shadow), replacing upstream's
   # near-invisible shadow. Radius/colors are left as the GNOME theme ships them.
-  # Requires Ulauncher's window shadow (see the service below) so it isn't
-  # clipped to the window edge.
+  # The shadow only renders because we (a) keep Ulauncher's window shadow (see
+  # the service below) and (b) give `.app` a positive margin here, so there's a
+  # transparent gutter for it instead of it being clipped to the window edge.
   themeOverrideCss = ''
 
     /* dotfiles: GNOME-style elevation so the launcher stands out. */
     .app {
+        /* Positive margin shrinks the panel inside a larger transparent window
+           so the shadow below has room to render instead of being clipped to
+           the window edge (upstream uses a negative margin, leaving none). */
+        margin: 24px;
         box-shadow:
-            0 0 0 1px rgba(0, 0, 0, 0.25),
-            0 2px 6px 0 rgba(0, 0, 0, 0.22),
-            0 12px 28px 2px rgba(0, 0, 0, 0.30);
+            0 0 0 1px rgba(0, 0, 0, 0.22),
+            0 3px 8px 0 rgba(0, 0, 0, 0.20),
+            0 8px 20px 2px rgba(0, 0, 0, 0.28);
     }
   '';
 
