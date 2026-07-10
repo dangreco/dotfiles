@@ -12,7 +12,13 @@ in
 
   # Ulauncher is Linux/GTK-only; on darwin this whole feature is a no-op.
   config = lib.mkIf (cfg.enable && pkgs.stdenv.isLinux) {
-    home.packages = [ pkgs.ulauncher ];
+    # `ulauncher-toggle` (bound to Super+s via dconf) shells out to a bare
+    # `dbus-send`, which nixpkgs doesn't wrap into its PATH — provide it so the
+    # shortcut works on non-NixOS where dbus tools aren't globally installed.
+    home.packages = [
+      pkgs.ulauncher
+      pkgs.dbus
+    ];
 
     # Run Ulauncher as a hidden daemon from login so the Super+s shortcut (which
     # calls `ulauncher-toggle`) just signals the running process — no cold-start

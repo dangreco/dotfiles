@@ -55,6 +55,13 @@ in
 
       "org/gnome/desktop/wm/keybindings" = {
         move-to-center = [ "<Super>c" ];
+      }
+      # GNOME binds Super+Space to switch-input-source by default, which would
+      # swallow the Ulauncher shortcut before it fires — clear it so the custom
+      # keybinding wins.
+      // lib.optionalAttrs config.features.ulauncher.enable {
+        switch-input-source = [ ];
+        switch-input-source-backward = [ ];
       };
 
       # GNOME only activates a custom shortcut once its path is registered in
@@ -81,13 +88,13 @@ in
         cursor-shape = "ibeam";
       };
     }
-    # Super+s toggles Ulauncher, but only when that feature is also enabled;
+    # Super+Space toggles Ulauncher, but only when that feature is also enabled;
     # its custom1 path is registered in the list above under the same guard.
     // lib.optionalAttrs config.features.ulauncher.enable {
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
         name = "Ulauncher";
         command = "ulauncher-toggle";
-        binding = "<Super>s";
+        binding = "<Super>space";
       };
     };
   };
