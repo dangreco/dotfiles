@@ -19,7 +19,7 @@ _: {
   features.dconf = {
     enable = true;
 
-    touchpadTapToClick = true;
+    touchpadTapToClick = false;
     naturalScrolling = true;
     showBatteryPercentage = true;
 
