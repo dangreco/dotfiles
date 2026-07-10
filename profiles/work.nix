@@ -9,6 +9,7 @@ _: {
   features.fish.enable = true;
   features.direnv.enable = true;
   features.cli.enable = true;
+  features.ulauncher.enable = true;
 
   features.dconf = {
     enable = true;

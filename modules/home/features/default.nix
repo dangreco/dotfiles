@@ -7,6 +7,7 @@
     ./direnv
     ./fish
     ./git
+    ./ulauncher
     ./update
   ];
 }

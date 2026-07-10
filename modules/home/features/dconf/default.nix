@@ -62,7 +62,8 @@ in
       "org/gnome/settings-daemon/plugins/media-keys" = {
         custom-keybindings = [
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
-        ];
+        ]
+        ++ lib.optional config.features.ulauncher.enable "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/";
       };
 
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
@@ -78,6 +79,15 @@ in
         audible-bell = false;
         visual-bell = false;
         cursor-shape = "ibeam";
+      };
+    }
+    # Super+s toggles Ulauncher, but only when that feature is also enabled;
+    # its custom1 path is registered in the list above under the same guard.
+    // lib.optionalAttrs config.features.ulauncher.enable {
+      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
+        name = "Ulauncher";
+        command = "ulauncher-toggle";
+        binding = "<Super>s";
       };
     };
   };
