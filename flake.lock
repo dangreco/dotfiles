@@ -134,7 +134,24 @@
         "flake-parts": "flake-parts",
         "git-hooks": "git-hooks",
         "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "ulauncher-theme-gnome": "ulauncher-theme-gnome"
+      }
+    },
+    "ulauncher-theme-gnome": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1753449863,
+        "narHash": "sha256-lwyUTOGpHubg1I0+tVyp6uH4pDob/2hQuSCaM9gCHN8=",
+        "owner": "aceydot",
+        "repo": "ulauncher-theme-gnome",
+        "rev": "8386da8e6f14eaef170b75655de4b213e62d87c7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "aceydot",
+        "repo": "ulauncher-theme-gnome",
+        "type": "github"
       }
     }
   },

@@ -12,6 +12,10 @@
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    ulauncher-theme-gnome = {
+      url = "github:aceydot/ulauncher-theme-gnome";
+      flake = false;
+    };
   };
 
   outputs =
