@@ -17,6 +17,7 @@ _: {
   features.ulauncher.enable = true;
   features.gimp.enable = true;
   features.slack.enable = true;
+  features.spotify.enable = true;
 
   features.dconf = {
     enable = true;

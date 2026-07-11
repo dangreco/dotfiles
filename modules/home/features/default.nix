@@ -11,6 +11,7 @@
     ./gimp
     ./git
     ./slack
+    ./spotify
     ./ulauncher
     ./update
   ];
