@@ -64,6 +64,7 @@ in
         project_panel = {
           button = true;
           dock = "left";
+          starts_open = true;
         };
 
         git_panel = {
