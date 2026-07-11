@@ -1,5 +1,4 @@
 _: {
-  # TODO: fill in your work git identity.
   features.git = {
     enable = true;
     userName = "Dan Greco";
