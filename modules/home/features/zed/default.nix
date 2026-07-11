@@ -93,7 +93,7 @@ in
 
         agent =  {
           button = false;
-          dock = "right"
+          dock = "right";
         };
       } cfg.settings;
     };
