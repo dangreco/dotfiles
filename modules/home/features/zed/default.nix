@@ -64,6 +64,12 @@ in
           anthropic_retention = false;
         };
 
+        auto_install_extensions = {
+          html = true;
+          nix = true;
+          toml = true;
+        };
+
         project_panel = {
           button = true;
           dock = "left";
