@@ -41,12 +41,8 @@ in
       package = null; # installed + kept updated by Zed's own installer, not Nix
       userSettings = lib.recursiveUpdate {
         auto_update = true;
-        # Align Zed's chrome with Adwaita where the editor allows it: the UI font
-        # becomes GNOME's Cantarell, and text selection is rectangular (GTK's
-        # selection isn't rounded). Zed's theme is color-only - element radii,
-        # padding and margins aren't exposed (hardcoded in the renderer) - so the
-        # Adwaita radius/spacing scale (9/12/15px) can't be applied here.
-        ui_font_family = "Cantarell";
+        ui_font_family = "Adwaita Sans";
+        buffer_font_family = "Adwaita Mono";
         rounded_selection = false;
         # Track the desktop color scheme (GNOME light/dark) via the bundled theme.
         theme = {
@@ -118,6 +114,12 @@ in
 
     # install.sh symlinks the binary to ~/.local/bin/zed.
     home.sessionPath = [ "$HOME/.local/bin" ];
+
+    # Add fonts
+    fonts.fontconfig.enable = true;
+    home.packages = with pkgs; [
+      adwaita-fonts
+    ];
 
     systemd.user.services.zed-install = {
       Unit.Description = "Install the Zed editor (zed.dev/install.sh)";
