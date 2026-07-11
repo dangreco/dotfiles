@@ -10,6 +10,7 @@
     ./flatpak
     ./gimp
     ./git
+    ./slack
     ./ulauncher
     ./update
   ];

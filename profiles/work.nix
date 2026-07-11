@@ -11,6 +11,7 @@ _: {
   features.ulauncher.enable = true;
   features.gimp.enable = true;
   features.dejadup.enable = true;
+  features.slack.enable = true;
 
   features.dconf = {
     enable = true;
@@ -22,6 +23,7 @@ _: {
     favoriteApps = [
       "org.gnome.Nautilus.desktop"
       "org.mozilla.firefox.desktop"
+      "com.slack.Slack.desktop"
     ];
   };
 
