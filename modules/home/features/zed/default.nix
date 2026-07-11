@@ -55,6 +55,7 @@ in
           dark = "Adwaita Dark";
         };
 
+        cursor_shape = "bar";
         load_direnv = "direct";
         format_on_save = "on";
 
@@ -94,6 +95,7 @@ in
         terminal = {
           button = true;
           dock = "bottom";
+
         };
 
         collaboration_panel = {
