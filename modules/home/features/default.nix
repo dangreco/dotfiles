@@ -6,6 +6,7 @@
     ./dconf
     ./direnv
     ./fish
+    ./flatpak
     ./git
     ./ulauncher
     ./update

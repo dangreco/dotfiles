@@ -16,6 +16,7 @@
       url = "github:aceydot/ulauncher-theme-gnome";
       flake = false;
     };
+    nix-flatpak.url = "github:gmodena/nix-flatpak?ref=latest";
   };
 
   outputs =
