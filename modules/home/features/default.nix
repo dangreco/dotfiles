@@ -4,6 +4,7 @@
     ./avatar
     ./cli
     ./dconf
+    ./dejadup
     ./direnv
     ./fish
     ./flatpak

@@ -10,6 +10,7 @@ _: {
   features.cli.enable = true;
   features.ulauncher.enable = true;
   features.gimp.enable = true;
+  features.dejadup.enable = true;
 
   features.dconf = {
     enable = true;

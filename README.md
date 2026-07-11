@@ -87,7 +87,7 @@ Supported systems: `x86_64-linux`, `aarch64-linux`, `aarch64-darwin`, `x86_64-da
 flake.nix              # inputs + profile registry (flake-parts)
 lib/                   # systems list + mkHome / mkHomes (profile x system matrix)
 modules/home/          # feature modules you toggle on and off
-  features/{cli,dconf,direnv,fish,flatpak,gimp,git,ulauncher,update}/
+  features/{cli,dconf,dejadup,direnv,fish,flatpak,gimp,git,ulauncher,update}/
 profiles/              # identities: flip feature toggles, set values
 ```
 
