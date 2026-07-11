@@ -55,10 +55,13 @@ in
           dark = "Adwaita Dark";
         };
 
+        load_direnv = "direct";
+        format_on_save = "on";
+
         telemetry = {
           diagnostics = false;
-          metrics= false;
-          anthropic_retention= false;
+          metrics = false;
+          anthropic_retention = false;
         };
 
         project_panel = {
@@ -92,7 +95,7 @@ in
           dock = "right";
         };
 
-        agent =  {
+        agent = {
           button = false;
           dock = "right";
         };

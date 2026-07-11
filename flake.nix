@@ -48,6 +48,14 @@
           # `nix develop` (or direnv `use flake`) installs the git hook.
           devShells.default = pkgs.mkShell {
             inputsFrom = [ config.pre-commit.devShell ];
+            packages =
+              with pkgs;
+              [
+                nil
+                nixd
+                nixfmt
+              ]
+              ++ config.pre-commit.settings.enabledPackages;
           };
         };
 
