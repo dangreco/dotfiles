@@ -6,6 +6,7 @@
     ./dconf
     ./dejadup
     ./direnv
+    ./extensions
     ./fish
     ./flatpak
     ./gimp

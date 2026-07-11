@@ -13,6 +13,14 @@ _: {
   features.dejadup.enable = true;
   features.slack.enable = true;
   features.spotify.enable = true;
+  # GNOME Shell extensions (extensions.gnome.org, auto-updated)
+  features.extensions.appindicator.enable = true;
+  features.extensions.caffeine.enable = true;
+  features.extensions.clipboard-indicator.enable = true;
+  features.extensions.freon.enable = true;
+  features.extensions.just-perfection.enable = true;
+  features.extensions.tophat.enable = true;
+  features.extensions.user-avatar-in-quick-settings.enable = true;
 
   features.dconf = {
     enable = true;

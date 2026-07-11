@@ -87,7 +87,8 @@ Supported systems: `x86_64-linux`, `aarch64-linux`, `aarch64-darwin`, `x86_64-da
 flake.nix              # inputs + profile registry (flake-parts)
 lib/                   # systems list + mkHome / mkHomes (profile x system matrix)
 modules/home/          # feature modules you toggle on and off
-  features/{cli,dconf,dejadup,direnv,fish,flatpak,gimp,git,slack,spotify,ulauncher,update}/
+  features/{avatar,cli,dconf,dejadup,direnv,extensions,fish,flatpak,gimp,git,slack,spotify,ulauncher,update}/
+  features/extensions/{appindicator,caffeine,clipboard-indicator,freon,just-perfection,tophat,user-avatar-in-quick-settings}.nix
 profiles/              # identities: flip feature toggles, set values
 ```
 
@@ -110,6 +111,22 @@ profiles/              # identities: flip feature toggles, set values
    `lib.mkIf cfg.enable`.
 2. Add it to the `imports` list in `modules/home/features/default.nix`.
 3. Enable it from any profile: `features.<name>.enable = true;`.
+
+## GNOME Shell extensions
+
+GNOME extensions are pulled from [extensions.gnome.org](https://extensions.gnome.org)
+at their latest shell-compatible version (not pinned to nixpkgs) and kept current by a
+daily timer via [`gext`](https://github.com/essembeh/gnome-extensions-cli). Toggle each
+one under `features.extensions`:
+
+```nix
+features.extensions.caffeine.enable = true;
+features.extensions.just-perfection.enable = true;
+```
+
+Each extension ships opinionated `dconf` defaults; enabling one auto-pulls the shared
+machinery (`features.extensions.enable`). First activation needs a shell reload
+(log out/in on Wayland) for the new extensions to appear.
 
 ## OS-gating
 
