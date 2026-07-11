@@ -14,6 +14,8 @@ _: {
   features.slack.enable = true;
   features.spotify.enable = true;
   features.zed.enable = true;
+  features.bitwarden.enable = true;
+  features.chromium.enable = true;
 
   # GNOME Shell extensions (extensions.gnome.org, auto-updated)
   features.extensions.caffeine.enable = true;

@@ -2,6 +2,8 @@
 {
   imports = [
     ./avatar
+    ./bitwarden
+    ./chromium
     ./cli
     ./dconf
     ./dejadup

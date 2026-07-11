@@ -21,7 +21,12 @@ let
     let
       pkgs = import nixpkgs {
         inherit system;
-        config.allowUnfree = true;
+        config = {
+          allowUnfree = true;
+          permittedInsecurePackages = [
+            "electron-39.8.10"
+          ];
+        };
       };
     in
     home-manager.lib.homeManagerConfiguration {
