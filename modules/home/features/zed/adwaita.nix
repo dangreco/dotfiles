@@ -301,154 +301,162 @@ let
       selection = "${h}44";
     }) hues;
 
-  # A status set (git/diagnostics) for one appearance: fg + faint bg + border.
-  mkStatus = color: {
-    inherit color;
-    background = "${color}26";
-    border = color;
+  # Flat keys for one status color. Zed's ThemeStyleContent stores git/diagnostic
+  # colors as separate flat string fields ("<name>", "<name>.background",
+  # "<name>.border"), NOT a nested object - nesting them makes serde reject the
+  # whole theme file ("invalid type: map, expected a string" -> "theme not found").
+  statusColor = name: color: {
+    ${name} = color;
+    ${name + ".background"} = "${color}26";
+    ${name + ".border"} = color;
   };
+
+  # Expand { statusName = color; } into the full set of flat status keys.
+  statusColors =
+    colors:
+    builtins.foldl' (acc: name: acc // statusColor name colors.${name}) { } (builtins.attrNames colors);
 
   # Build a full Zed ThemeStyle from an Adwaita chrome set + a syntax-token set.
-  mkStyle = a: g: {
-    # --- surfaces ---
-    "background" = a.window;
-    "surface.background" = a.headerbar;
-    "elevated_surface.background" = a.popover;
+  mkStyle =
+    a: g:
+    {
+      # --- surfaces ---
+      "background" = a.window;
+      "surface.background" = a.headerbar;
+      "elevated_surface.background" = a.popover;
 
-    # --- accent ---
-    "accent" = a.accent; # singular form read by older Zed
-    "accents" = [ a.accent ]; # array form in schema v0.2.0
+      # --- accent ---
+      "accent" = a.accent; # singular form read by older Zed
+      "accents" = [ a.accent ]; # array form in schema v0.2.0
 
-    # --- borders ---
-    "border" = a.border;
-    "border.variant" = a.borderVariant;
-    "border.focused" = a.accent;
-    "border.selected" = a.accent;
-    "border.disabled" = a.borderVariant;
-    "border.transparent" = "#00000000";
+      # --- borders ---
+      "border" = a.border;
+      "border.variant" = a.borderVariant;
+      "border.focused" = a.accent;
+      "border.selected" = a.accent;
+      "border.disabled" = a.borderVariant;
+      "border.transparent" = "#00000000";
 
-    # --- text ---
-    "text" = a.fg;
-    "text.accent" = a.accent;
-    "text.muted" = a.fgMuted;
-    "text.disabled" = a.fgDisabled;
-    "text.placeholder" = a.fgDisabled;
+      # --- text ---
+      "text" = a.fg;
+      "text.accent" = a.accent;
+      "text.muted" = a.fgMuted;
+      "text.disabled" = a.fgDisabled;
+      "text.placeholder" = a.fgDisabled;
 
-    # --- icons ---
-    "icon" = a.fg;
-    "icon.accent" = a.accent;
-    "icon.muted" = a.fgMuted;
-    "icon.disabled" = a.fgDisabled;
-    "icon.placeholder" = a.fgDisabled;
+      # --- icons ---
+      "icon" = a.fg;
+      "icon.accent" = a.accent;
+      "icon.muted" = a.fgMuted;
+      "icon.disabled" = a.fgDisabled;
+      "icon.placeholder" = a.fgDisabled;
 
-    # --- elements (buttons/inputs) ---
-    "element.background" = a.card;
-    "element.hover" = a.hover;
-    "element.active" = a.active;
-    "element.selected" = a.selected;
-    "element.disabled" = a.hover;
-    "ghost_element.background" = "#00000000";
-    "ghost_element.hover" = a.hover;
-    "ghost_element.active" = a.active;
-    "ghost_element.selected" = a.selected;
-    "ghost_element.disabled" = a.hover;
+      # --- elements (buttons/inputs) ---
+      "element.background" = a.card;
+      "element.hover" = a.hover;
+      "element.active" = a.active;
+      "element.selected" = a.selected;
+      "element.disabled" = a.hover;
+      "ghost_element.background" = "#00000000";
+      "ghost_element.hover" = a.hover;
+      "ghost_element.active" = a.active;
+      "ghost_element.selected" = a.selected;
+      "ghost_element.disabled" = a.hover;
 
-    # --- editor (Adwaita chrome, Adwaita-syntax text) ---
-    "editor.background" = a.view;
-    "editor.foreground" = g.fg;
-    "editor.gutter.background" = a.view;
-    "editor.line_number" = a.fgDisabled;
-    "editor.active_line_number" = a.fg;
-    "editor.active_line.background" = a.activeLine;
-    "editor.highlighted_line.background" = a.activeLine;
-    "editor.invisible" = a.fgDisabled;
-    "editor.wrap_guide" = a.borderVariant;
-    "editor.active_wrap_guide" = a.border;
-    "editor.indent_guide" = a.borderVariant;
-    "editor.indent_guide_active" = a.border;
-    "editor.subheader.background" = a.headerbar;
-    "editor.document_highlight.read_background" = a.hover;
-    "editor.document_highlight.write_background" = a.selected;
-    "editor.document_highlight.bracket_background" = a.hover;
+      # --- editor (Adwaita chrome, Adwaita-syntax text) ---
+      "editor.background" = a.view;
+      "editor.foreground" = g.fg;
+      "editor.gutter.background" = a.view;
+      "editor.line_number" = a.fgDisabled;
+      "editor.active_line_number" = a.fg;
+      "editor.active_line.background" = a.activeLine;
+      "editor.highlighted_line.background" = a.activeLine;
+      "editor.invisible" = a.fgDisabled;
+      "editor.wrap_guide" = a.borderVariant;
+      "editor.active_wrap_guide" = a.border;
+      "editor.indent_guide" = a.borderVariant;
+      "editor.indent_guide_active" = a.border;
+      "editor.subheader.background" = a.headerbar;
+      "editor.document_highlight.read_background" = a.hover;
+      "editor.document_highlight.write_background" = a.selected;
+      "editor.document_highlight.bracket_background" = a.hover;
 
-    # --- chrome bars ---
-    "status_bar.background" = a.window;
-    "title_bar.background" = a.headerbar;
-    "title_bar.inactive_background" = a.window;
-    "toolbar.background" = a.headerbar;
-    "tab_bar.background" = a.headerbar;
-    "tab.active_background" = a.view;
-    "tab.inactive_background" = a.headerbar;
-    "panel.background" = a.sidebar;
-    "panel.focused_border" = a.accent;
-    "panel.indent_guide" = a.borderVariant;
-    "panel.indent_guide_active" = a.border;
-    "panel.indent_guide_hover" = a.border;
-    "pane.focused_border" = a.accent;
-    "pane_group.border" = a.border;
+      # --- chrome bars ---
+      "status_bar.background" = a.window;
+      "title_bar.background" = a.headerbar;
+      "title_bar.inactive_background" = a.window;
+      "toolbar.background" = a.headerbar;
+      "tab_bar.background" = a.headerbar;
+      "tab.active_background" = a.view;
+      "tab.inactive_background" = a.headerbar;
+      "panel.background" = a.sidebar;
+      "panel.focused_border" = a.accent;
+      "panel.indent_guide" = a.borderVariant;
+      "panel.indent_guide_active" = a.border;
+      "panel.indent_guide_hover" = a.border;
+      "pane.focused_border" = a.accent;
+      "pane_group.border" = a.border;
 
-    # --- search & scrollbar ---
-    "search.match_background" = "${g.yellow}40";
-    "scrollbar.thumb.background" = "${a.fg}33";
-    "scrollbar.thumb.hover_background" = "${a.fg}55";
-    "scrollbar.thumb.border" = "#00000000";
-    "scrollbar.track.background" = "#00000000";
-    "scrollbar.track.border" = "#00000000";
+      # --- search & scrollbar ---
+      "search.match_background" = "${g.yellow}40";
+      "scrollbar.thumb.background" = "${a.fg}33";
+      "scrollbar.thumb.hover_background" = "${a.fg}55";
+      "scrollbar.thumb.border" = "#00000000";
+      "scrollbar.track.background" = "#00000000";
+      "scrollbar.track.border" = "#00000000";
 
-    # --- git status ---
-    "created" = mkStatus g.green;
-    "deleted" = mkStatus g.red;
-    "modified" = mkStatus g.yellow;
-    "conflict" = mkStatus g.purple;
-    "ignored" = mkStatus a.fgDisabled;
-    "hidden" = mkStatus a.fgDisabled;
-    "renamed" = mkStatus g.blue;
+      # --- multiplayer ---
+      "players" = mkPlayers [
+        a.accent
+        g.green
+        g.purple
+        g.orange
+        g.aqua
+        g.yellow
+        g.red
+      ];
 
-    # --- diagnostics ---
-    "error" = mkStatus g.red;
-    "warning" = mkStatus g.yellow;
-    "info" = mkStatus g.blue;
-    "hint" = mkStatus g.aqua;
-    "success" = mkStatus g.green;
-    "predictive" = mkStatus g.purple;
-    "unreachable" = mkStatus g.comment;
+      # --- terminal (Adwaita ANSI, Adwaita surface) ---
+      "terminal.background" = a.view;
+      "terminal.foreground" = g.fg;
+      "terminal.bright_foreground" = g.fg;
+      "terminal.dim_foreground" = g.comment;
+      "terminal.ansi.background" = a.view;
+      "terminal.ansi.black" = g.ansi.black;
+      "terminal.ansi.red" = g.ansi.red;
+      "terminal.ansi.green" = g.ansi.green;
+      "terminal.ansi.yellow" = g.ansi.yellow;
+      "terminal.ansi.blue" = g.ansi.blue;
+      "terminal.ansi.magenta" = g.ansi.magenta;
+      "terminal.ansi.cyan" = g.ansi.cyan;
+      "terminal.ansi.white" = g.ansi.white;
+      "terminal.ansi.bright_black" = g.ansi.bright_black;
+      "terminal.ansi.bright_red" = g.ansi.bright_red;
+      "terminal.ansi.bright_green" = g.ansi.bright_green;
+      "terminal.ansi.bright_yellow" = g.ansi.bright_yellow;
+      "terminal.ansi.bright_blue" = g.ansi.bright_blue;
+      "terminal.ansi.bright_magenta" = g.ansi.bright_magenta;
+      "terminal.ansi.bright_cyan" = g.ansi.bright_cyan;
+      "terminal.ansi.bright_white" = g.ansi.bright_white;
 
-    # --- multiplayer ---
-    "players" = mkPlayers [
-      a.accent
-      g.green
-      g.purple
-      g.orange
-      g.aqua
-      g.yellow
-      g.red
-    ];
-
-    # --- terminal (Adwaita ANSI, Adwaita surface) ---
-    "terminal.background" = a.view;
-    "terminal.foreground" = g.fg;
-    "terminal.bright_foreground" = g.fg;
-    "terminal.dim_foreground" = g.comment;
-    "terminal.ansi.background" = a.view;
-    "terminal.ansi.black" = g.ansi.black;
-    "terminal.ansi.red" = g.ansi.red;
-    "terminal.ansi.green" = g.ansi.green;
-    "terminal.ansi.yellow" = g.ansi.yellow;
-    "terminal.ansi.blue" = g.ansi.blue;
-    "terminal.ansi.magenta" = g.ansi.magenta;
-    "terminal.ansi.cyan" = g.ansi.cyan;
-    "terminal.ansi.white" = g.ansi.white;
-    "terminal.ansi.bright_black" = g.ansi.bright_black;
-    "terminal.ansi.bright_red" = g.ansi.bright_red;
-    "terminal.ansi.bright_green" = g.ansi.bright_green;
-    "terminal.ansi.bright_yellow" = g.ansi.bright_yellow;
-    "terminal.ansi.bright_blue" = g.ansi.bright_blue;
-    "terminal.ansi.bright_magenta" = g.ansi.bright_magenta;
-    "terminal.ansi.bright_cyan" = g.ansi.bright_cyan;
-    "terminal.ansi.bright_white" = g.ansi.bright_white;
-
-    "syntax" = mkSyntax g;
-  };
+      "syntax" = mkSyntax g;
+    }
+    // statusColors {
+      created = g.green;
+      deleted = g.red;
+      modified = g.yellow;
+      conflict = g.purple;
+      ignored = a.fgDisabled;
+      hidden = a.fgDisabled;
+      renamed = g.blue;
+      error = g.red;
+      warning = g.yellow;
+      info = g.blue;
+      hint = g.aqua;
+      success = g.green;
+      predictive = g.purple;
+      unreachable = g.comment;
+    };
 in
 {
   # Only provision the theme alongside the editor itself (Linux; the zed feature
