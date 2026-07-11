@@ -59,6 +59,12 @@ in
         load_direnv = "direct";
         format_on_save = "on";
 
+        title_bar = {
+          show_onboarding_banner = false;
+          show_user_picture = false;
+          show_sign_in = false;
+        };
+
         telemetry = {
           diagnostics = false;
           metrics = false;
