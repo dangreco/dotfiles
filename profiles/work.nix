@@ -9,6 +9,7 @@ _: {
   features.direnv.enable = true;
   features.cli.enable = true;
   features.ulauncher.enable = true;
+  features.gimp.enable = true;
 
   features.dconf = {
     enable = true;

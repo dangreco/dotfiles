@@ -7,6 +7,7 @@
     ./direnv
     ./fish
     ./flatpak
+    ./gimp
     ./git
     ./ulauncher
     ./update
