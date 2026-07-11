@@ -54,6 +54,47 @@ in
           light = "Adwaita Light";
           dark = "Adwaita Dark";
         };
+
+        telemetry = {
+          diagnostics = false;
+          metrics= false;
+          anthropic_retention= false;
+        };
+
+        project_panel = {
+          button = true;
+          dock = "left";
+        };
+
+        git_panel = {
+          button = true;
+          dock = "left";
+        };
+
+        outline_panel = {
+          button = true;
+          dock = "left";
+        };
+
+        debugger = {
+          button = true;
+          dock = "bottom";
+        };
+
+        terminal = {
+          button = true;
+          dock = "bottom";
+        };
+
+        collaboration_panel = {
+          button = false;
+          dock = "right";
+        };
+
+        agent =  {
+          button = false;
+          dock = "right"
+        };
       } cfg.settings;
     };
 
