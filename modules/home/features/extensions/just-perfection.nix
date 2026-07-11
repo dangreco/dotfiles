@@ -16,6 +16,7 @@ in
     gnomeShellExtensions = [ "just-perfection-desktop@just-perfection" ];
 
     dconf.settings."org/gnome/shell/extensions/just-perfection" = {
+      animation = 4; # faster
       startup-status = 0; # boot to the desktop, not the overview (upstream default)
       workspace-wrap-around = true; # cycling workspaces wraps instead of stopping at the ends
     };

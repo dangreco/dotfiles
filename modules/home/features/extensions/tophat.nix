@@ -16,7 +16,15 @@ in
     gnomeShellExtensions = [ "tophat@fflewddur.github.io" ];
 
     dconf.settings."org/gnome/shell/extensions/tophat" = {
+      show-cpu = true;
+      show-mem = true;
+
       cpu-show-cores = false; # one aggregate CPU meter instead of one bar per core
+
+      # hide
+      show-disk = false;
+      show-fs = false;
+      show-net = false;
     };
   };
 }

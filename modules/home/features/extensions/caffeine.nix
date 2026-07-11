@@ -16,9 +16,10 @@ in
     gnomeShellExtensions = [ "caffeine@patapon.info" ];
 
     dconf.settings."org/gnome/shell/extensions/caffeine" = {
-      enable-fullscreen = true; # auto-inhibit suspend while a fullscreen app is running
-      show-notifications = false; # skip the toast every time it toggles
-      restore-state = true; # remember the on/off state across shell restarts (default forgets it)
+      enable-fullscreen = true;
+      show-notifications = false;
+      restore-state = true;
+      show-indicator = "only-active";
     };
   };
 }
