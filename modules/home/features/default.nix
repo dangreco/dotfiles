@@ -15,5 +15,6 @@
     ./spotify
     ./ulauncher
     ./update
+    ./zed
   ];
 }

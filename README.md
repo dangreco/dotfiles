@@ -87,7 +87,7 @@ Supported systems: `x86_64-linux`, `aarch64-linux`, `aarch64-darwin`, `x86_64-da
 flake.nix              # inputs + profile registry (flake-parts)
 lib/                   # systems list + mkHome / mkHomes (profile x system matrix)
 modules/home/          # feature modules you toggle on and off
-  features/{avatar,cli,dconf,dejadup,direnv,extensions,fish,flatpak,gimp,git,slack,spotify,ulauncher,update}/
+  features/{avatar,cli,dconf,dejadup,direnv,extensions,fish,flatpak,gimp,git,slack,spotify,ulauncher,update,zed}/
   features/extensions/{appindicator,caffeine,clipboard-indicator,freon,just-perfection,tophat,user-avatar-in-quick-settings}.nix
 profiles/              # identities: flip feature toggles, set values
 ```

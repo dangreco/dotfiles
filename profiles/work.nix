@@ -13,6 +13,8 @@ _: {
   features.dejadup.enable = true;
   features.slack.enable = true;
   features.spotify.enable = true;
+  features.zed.enable = true;
+
   # GNOME Shell extensions (extensions.gnome.org, auto-updated)
   features.extensions.appindicator.enable = true;
   features.extensions.caffeine.enable = true;
