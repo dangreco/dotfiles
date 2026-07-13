@@ -11,7 +11,12 @@ in
     programs.fish = {
       enable = true;
       # Disable the startup greeting.
-      interactiveShellInit = "set -g fish_greeting";
+      interactiveShellInit = ''
+        set -g fish_greeting
+        if test -f $HOME/.config/fish/config.local.fish
+          source $HOME/.config/fish/config.local.fish
+        end
+      '';
       shellInit = ''
         if test -f /nix/var/nix/profiles/default/etc/profile.d/nix.fish
           source /nix/var/nix/profiles/default/etc/profile.d/nix.fish
