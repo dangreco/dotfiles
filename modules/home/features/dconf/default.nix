@@ -34,7 +34,7 @@ in
         // lib.optionalAttrs cfg.naturalScrolling { natural-scroll = true; };
 
       "org/gnome/desktop/peripherals/mouse" = lib.optionalAttrs cfg.naturalScrolling {
-        natural-scroll = true;
+        natural-scroll = false;
       };
 
       "org/gnome/desktop/interface" = lib.optionalAttrs cfg.showBatteryPercentage {
