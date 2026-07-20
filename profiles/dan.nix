@@ -26,6 +26,7 @@ _: {
   features.extensions.just-perfection.enable = true;
   features.extensions.tophat.enable = true;
   features.extensions.user-avatar-in-quick-settings.enable = true;
+  features.extensions.medialine.enable = true;
 
   features.dconf = {
     enable = true;

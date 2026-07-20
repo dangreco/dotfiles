@@ -41,6 +41,7 @@ in
     ./just-perfection.nix
     ./tophat.nix
     ./user-avatar-in-quick-settings.nix
+    ./medialine.nix
   ];
   options.features.extensions.enable = lib.mkEnableOption "GNOME Shell extension management (extensions.gnome.org, auto-updated)";
 
