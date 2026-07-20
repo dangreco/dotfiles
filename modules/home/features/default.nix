@@ -13,6 +13,7 @@
     ./flatpak
     ./gimp
     ./git
+    ./homebrew
     ./slack
     ./spotify
     ./ulauncher

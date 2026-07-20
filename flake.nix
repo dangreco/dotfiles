@@ -17,6 +17,10 @@
       flake = false;
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak?ref=latest";
+    home-manager-brew = {
+      url = "github:koalalorenzo/home-manager-brew";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

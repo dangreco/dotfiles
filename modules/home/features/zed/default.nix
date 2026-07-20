@@ -33,101 +33,120 @@ in
     };
   };
 
-  # systemd.user is Linux-only; darwin (launchd, mirroring the `update` feature's
-  # split) is intentionally out of scope for now.
-  config = lib.mkIf (cfg.enable && pkgs.stdenv.isLinux) {
-    programs.zed-editor = {
-      enable = true;
-      package = null; # installed + kept updated by Zed's own installer, not Nix
-      userSettings = lib.recursiveUpdate {
-        auto_update = true;
-        ui_font_family = "Adwaita Sans";
-        buffer_font_family = "Adwaita Mono";
-        rounded_selection = false;
-        # Track the desktop color scheme (GNOME light/dark) via the bundled theme.
-        theme = {
-          mode = "system";
-          light = "Adwaita Light";
-          dark = "Adwaita Dark";
+  # Settings + the install bootstrap are cross-platform; only the service that runs
+  # the bootstrap differs (systemd on Linux, launchd on darwin — mirroring the
+  # `update` feature's split). Zed reads ~/.config/zed/settings.json on both.
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
+      {
+        programs.zed-editor = {
+          enable = true;
+          package = null; # installed + kept updated by Zed's own installer, not Nix
+          userSettings = lib.recursiveUpdate {
+            auto_update = true;
+            ui_font_family = "Adwaita Sans";
+            buffer_font_family = "Adwaita Mono";
+            rounded_selection = false;
+            # Track the desktop color scheme (GNOME light/dark) via the bundled theme.
+            theme = {
+              mode = "system";
+              light = "Adwaita Light";
+              dark = "Adwaita Dark";
+            };
+
+            cursor_shape = "bar";
+            load_direnv = "direct";
+            format_on_save = "on";
+
+            title_bar = {
+              show_onboarding_banner = false;
+              show_user_picture = false;
+              show_sign_in = false;
+            };
+
+            telemetry = {
+              diagnostics = false;
+              metrics = false;
+              anthropic_retention = false;
+            };
+
+            auto_install_extensions = {
+              html = true;
+              nix = true;
+              toml = true;
+            };
+
+            project_panel = {
+              button = true;
+              dock = "left";
+              starts_open = true;
+            };
+
+            git_panel = {
+              button = true;
+              dock = "left";
+            };
+
+            outline_panel = {
+              button = true;
+              dock = "left";
+            };
+
+            debugger = {
+              button = true;
+              dock = "bottom";
+            };
+
+            terminal = {
+              button = true;
+              dock = "bottom";
+
+            };
+
+            collaboration_panel = {
+              button = false;
+              dock = "right";
+            };
+
+            agent = {
+              button = false;
+              dock = "right";
+            };
+          } cfg.settings;
         };
 
-        cursor_shape = "bar";
-        load_direnv = "direct";
-        format_on_save = "on";
+        # install.sh symlinks the binary to ~/.local/bin/zed.
+        home.sessionPath = [ "$HOME/.local/bin" ];
+      }
 
-        title_bar = {
-          show_onboarding_banner = false;
-          show_user_picture = false;
-          show_sign_in = false;
+      (lib.mkIf pkgs.stdenv.isLinux {
+        # Adwaita fonts — HM `fonts.fontconfig` is Linux-only; on macOS the
+        # Adwaita Sans/Mono families just fall back until a font cask is added.
+        fonts.fontconfig.enable = true;
+        home.packages = with pkgs; [
+          adwaita-fonts
+        ];
+
+        systemd.user.services.zed-install = {
+          Unit.Description = "Install the Zed editor (zed.dev/install.sh)";
+          Service = {
+            Type = "oneshot";
+            ExecStart = "${installScript}/bin/zed-install";
+          };
+          Install.WantedBy = [ "default.target" ];
         };
+      })
 
-        telemetry = {
-          diagnostics = false;
-          metrics = false;
-          anthropic_retention = false;
+      (lib.mkIf pkgs.stdenv.isDarwin {
+        # Bootstrap Zed via launchd (mirrors the `update` feature's darwin split).
+        launchd.agents.zed-install = {
+          enable = true;
+          config = {
+            ProgramArguments = [ "${installScript}/bin/zed-install" ];
+            RunAtLoad = true;
+          };
         };
-
-        auto_install_extensions = {
-          html = true;
-          nix = true;
-          toml = true;
-        };
-
-        project_panel = {
-          button = true;
-          dock = "left";
-          starts_open = true;
-        };
-
-        git_panel = {
-          button = true;
-          dock = "left";
-        };
-
-        outline_panel = {
-          button = true;
-          dock = "left";
-        };
-
-        debugger = {
-          button = true;
-          dock = "bottom";
-        };
-
-        terminal = {
-          button = true;
-          dock = "bottom";
-
-        };
-
-        collaboration_panel = {
-          button = false;
-          dock = "right";
-        };
-
-        agent = {
-          button = false;
-          dock = "right";
-        };
-      } cfg.settings;
-    };
-
-    # install.sh symlinks the binary to ~/.local/bin/zed.
-    home.sessionPath = [ "$HOME/.local/bin" ];
-
-    # Add fonts
-    fonts.fontconfig.enable = true;
-    home.packages = with pkgs; [
-      adwaita-fonts
-    ];
-
-    systemd.user.services.zed-install = {
-      Unit.Description = "Install the Zed editor (zed.dev/install.sh)";
-      Service = {
-        Type = "oneshot";
-        ExecStart = "${installScript}/bin/zed-install";
-      };
-      Install.WantedBy = [ "default.target" ];
-    };
-  };
+      })
+    ]
+  );
 }
