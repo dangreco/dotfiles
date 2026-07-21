@@ -155,7 +155,7 @@ fi
 USER_NAME="$(id -un)"
 TARGET="${PROFILE}@${USER_NAME}@${SYSTEM}"
 
-if ! nix eval --extra-experimental-features "$FLAKE_FEATURES" \
+if ! nix eval --refresh --extra-experimental-features "$FLAKE_FEATURES" \
   "${REPO}#homeConfigurations" --apply builtins.attrNames 2>/dev/null \
   | grep -q "\"${TARGET}\""; then
   err "no config '${TARGET}' — add '${USER_NAME}' to the '${PROFILE}' profile's \`usernames\` in flake.nix"
@@ -165,7 +165,7 @@ fi
 # Apply the configuration.
 # ---------------------------------------------------------------------------
 info "Applying ${TARGET} from ${REPO} ..."
-nix run --extra-experimental-features "$FLAKE_FEATURES" \
+nix run --refresh --extra-experimental-features "$FLAKE_FEATURES" \
   github:nix-community/home-manager -- switch \
   --flake "${REPO}#${TARGET}"
 
