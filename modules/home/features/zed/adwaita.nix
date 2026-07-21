@@ -139,6 +139,50 @@ let
     };
   };
 
+  # Hex helpers for muting the accent hues. Adwaita's ramps are highly saturated,
+  # which reads as garish in code; `desaturate` mixes each channel toward the
+  # color's own luminance-gray by `ratio` percent (0 = untouched, 100 = fully gray).
+  hexChars = "0123456789abcdef";
+  hexMap = builtins.listToAttrs (
+    lib.imap0 (i: c: {
+      name = c;
+      value = i;
+    }) (lib.stringToCharacters hexChars)
+  );
+  hexToInt = s: 16 * hexMap.${builtins.substring 0 1 s} + hexMap.${builtins.substring 1 1 s};
+  toHex2 =
+    n:
+    let
+      hi = n / 16;
+      lo = n - 16 * hi;
+    in
+    (builtins.substring hi 1 hexChars) + (builtins.substring lo 1 hexChars);
+  desaturate =
+    ratio: hex:
+    let
+      r = hexToInt (builtins.substring 1 2 hex);
+      g = hexToInt (builtins.substring 3 2 hex);
+      b = hexToInt (builtins.substring 5 2 hex);
+      gray = (r * 30 + g * 59 + b * 11) / 100;
+      mix = x: (x * (100 - ratio) + gray * ratio) / 100;
+    in
+    "#" + toHex2 (mix r) + toHex2 (mix g) + toHex2 (mix b);
+
+  # Desaturate only the accent hues; leave fg / comment / bracket / ansi as-is so
+  # body text stays legible and the terminal shows accurate colors.
+  muteHues =
+    t:
+    t
+    // lib.genAttrs [
+      "red"
+      "green"
+      "yellow"
+      "blue"
+      "purple"
+      "aqua"
+      "orange"
+    ] (name: desaturate 35 t.${name});
+
   # Standard highlight-group -> token-role mapping (which token gets which hue
   # family); the hues themselves are the Adwaita `tokens` above. Identical for
   # both appearances - only the underlying shades differ.
@@ -168,7 +212,6 @@ let
     };
     "constructor" = {
       color = g.orange;
-      font_weight = 700;
     };
     "embedded" = {
       color = g.fg;
@@ -179,11 +222,9 @@ let
     };
     "emphasis.strong" = {
       color = g.fg;
-      font_weight = 700;
     };
     "function" = {
       color = g.green;
-      font_weight = 700;
     };
     "function.builtin" = {
       color = g.orange;
@@ -193,7 +234,6 @@ let
     };
     "function.method" = {
       color = g.green;
-      font_weight = 700;
     };
     "keyword" = {
       color = g.red;
@@ -266,7 +306,6 @@ let
     };
     "text.title" = {
       color = g.orange;
-      font_weight = 700;
     };
     "text.uri" = {
       color = g.blue;
@@ -307,6 +346,14 @@ let
   # whole theme file ("invalid type: map, expected a string" -> "theme not found").
   statusColor = name: color: {
     ${name} = color;
+    ${name + ".background"} = "${color}26";
+    ${name + ".border"} = color;
+  };
+
+  # Like statusColor, but the main color carries `alpha` (2 hex digits) so the
+  # diagnostic underline / inline text renders faint instead of full-opacity.
+  statusColorA = alpha: name: color: {
+    ${name} = "${color}${alpha}";
     ${name + ".background"} = "${color}26";
     ${name + ".border"} = color;
   };
@@ -449,14 +496,16 @@ let
       ignored = a.fgDisabled;
       hidden = a.fgDisabled;
       renamed = g.blue;
-      error = g.red;
-      warning = g.yellow;
-      info = g.blue;
-      hint = g.aqua;
       success = g.green;
       predictive = g.purple;
       unreachable = g.comment;
-    };
+    }
+    # Diagnostic severities are drawn faint (~55% opacity) so their squiggle
+    # underlines and inline text stay unobtrusive.
+    // statusColorA "8c" "error" g.red
+    // statusColorA "8c" "warning" g.yellow
+    // statusColorA "8c" "info" g.blue
+    // statusColorA "8c" "hint" g.aqua;
 in
 {
   # Only provision the theme alongside the editor itself (Linux; the zed feature
@@ -470,12 +519,12 @@ in
         {
           appearance = "dark";
           name = "Adwaita Dark";
-          style = mkStyle adwaita.dark tokens.dark;
+          style = mkStyle adwaita.dark (muteHues tokens.dark);
         }
         {
           appearance = "light";
           name = "Adwaita Light";
-          style = mkStyle adwaita.light tokens.light;
+          style = mkStyle adwaita.light (muteHues tokens.light);
         }
       ];
     };
