@@ -13,6 +13,7 @@
     ./flatpak
     ./gimp
     ./git
+    ./herdr
     ./homebrew
     ./pipewire
     ./slack

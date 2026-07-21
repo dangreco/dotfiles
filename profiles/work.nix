@@ -16,6 +16,7 @@ _: {
   features.zed.enable = true;
   features.bitwarden.enable = true;
   features.chromium.enable = true;
+  features.herdr.enable = true;
 
   # GNOME Shell extensions (extensions.gnome.org, auto-updated)
   features.extensions.caffeine.enable = true;
