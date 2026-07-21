@@ -25,6 +25,11 @@ _: {
   features.extensions.user-avatar-in-quick-settings.enable = true;
   features.extensions.medialine.enable = true;
 
+  features.pipewire = {
+    enable = true;
+    disableAirplayDiscovery = true;
+  };
+
   features.dconf = {
     enable = true;
 

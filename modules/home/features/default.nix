@@ -14,6 +14,7 @@
     ./gimp
     ./git
     ./homebrew
+    ./pipewire
     ./slack
     ./spotify
     ./ulauncher
