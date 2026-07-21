@@ -44,8 +44,10 @@ let
       ];
     };
 
-  # Expand a registry of profiles into a `<profile>@<system>` attrset of
-  # home-manager configurations. `username` defaults to the profile name.
+  # Expand a registry of profiles into a `<profile>@<username>@<system>` attrset
+  # of home-manager configurations. A profile may run under several login
+  # usernames (`usernames`, defaulting to `[ name ]`) so the same profile can be
+  # applied on hosts whose login user differs from the profile name.
   mkHomes =
     profiles:
     lib.listToAttrs (
@@ -54,14 +56,16 @@ let
         let
           profile = profiles.${name};
         in
-        map (
-          system:
-          lib.nameValuePair "${name}@${system}" (mkHome {
-            username = profile.username or name;
-            inherit system;
-            inherit (profile) module;
-          })
-        ) systems
+        lib.concatMap (
+          username:
+          map (
+            system:
+            lib.nameValuePair "${name}@${username}@${system}" (mkHome {
+              inherit username system;
+              inherit (profile) module;
+            })
+          ) systems
+        ) (profile.usernames or [ name ])
       ) (lib.attrNames profiles)
     );
 in

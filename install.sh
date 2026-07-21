@@ -148,14 +148,28 @@ else
 fi
 
 # ---------------------------------------------------------------------------
+# Resolve the flake output for this host: <profile>@<login user>@<system>.
+# The login user is baked into home.username, so it must be registered under
+# the profile's `usernames` in flake.nix.
+# ---------------------------------------------------------------------------
+USER_NAME="$(id -un)"
+TARGET="${PROFILE}@${USER_NAME}@${SYSTEM}"
+
+if ! nix eval --extra-experimental-features "$FLAKE_FEATURES" \
+  "${REPO}#homeConfigurations" --apply builtins.attrNames 2>/dev/null \
+  | grep -q "\"${TARGET}\""; then
+  err "no config '${TARGET}' — add '${USER_NAME}' to the '${PROFILE}' profile's \`usernames\` in flake.nix"
+fi
+
+# ---------------------------------------------------------------------------
 # Apply the configuration.
 # ---------------------------------------------------------------------------
-info "Applying ${PROFILE}@${SYSTEM} from ${REPO} ..."
+info "Applying ${TARGET} from ${REPO} ..."
 nix run --extra-experimental-features "$FLAKE_FEATURES" \
   github:nix-community/home-manager -- switch \
-  --flake "${REPO}#${PROFILE}@${SYSTEM}"
+  --flake "${REPO}#${TARGET}"
 
-info "Done. ${PROFILE}@${SYSTEM} is active."
+info "Done. ${TARGET} is active."
 if [ "$IS_OSTREE" -eq 1 ]; then
   info "The Nix store is mounted via systemd and persists across rpm-ostree updates."
 fi

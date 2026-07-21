@@ -63,14 +63,20 @@
           };
         };
 
-      # Each profile is built for every system, keyed `<profile>@<system>`
-      # (dan@x86_64-linux, dan@aarch64-darwin, work@x86_64-linux, and so on).
+      # Each profile is built for every username x system, keyed
+      # `<profile>@<username>@<system>` (dan@dan@x86_64-linux,
+      # work@work@aarch64-darwin, work@dangreco@aarch64-darwin, and so on).
+      # `usernames` defaults to `[ "<profile>" ]`.
       flake.homeConfigurations = lib'.mkHomes {
         dan = {
           module = ./profiles/dan.nix;
         };
         work = {
           module = ./profiles/work.nix;
+          usernames = [
+            "work"
+            "dangreco"
+          ];
         };
       };
     };

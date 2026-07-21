@@ -65,7 +65,7 @@ let
     name = "dotfiles-update";
     runtimeInputs = [ pkgs.coreutils ];
     text = ''
-      home-manager switch --refresh --flake "${flake}#${cfg.profile}@${system}"
+      home-manager switch --refresh --flake "${flake}#${cfg.profile}@${config.home.username}@${system}"
       rm -f "${stateDir}/update-available" "${stateDir}/snooze"
     '';
   };

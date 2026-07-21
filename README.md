@@ -35,16 +35,19 @@ re-run it.
 With home-manager already installed:
 
 ```bash
-home-manager switch --flake .#<profile>@<system>
+home-manager switch --flake .#<profile>@<username>@<system>
 # e.g.
-home-manager switch --flake .#dan@x86_64-linux
-home-manager switch --flake .#work@aarch64-darwin
+home-manager switch --flake .#dan@dan@x86_64-linux
+home-manager switch --flake .#work@dangreco@aarch64-darwin
 ```
+
+`<username>` is your login user (`id -un`); it must be listed under the
+profile's `usernames` in `flake.nix`.
 
 First time, without home-manager installed:
 
 ```bash
-nix run github:nix-community/home-manager -- switch --flake .#dan@x86_64-linux
+nix run github:nix-community/home-manager -- switch --flake .#dan@dan@x86_64-linux
 ```
 
 ## Updating
@@ -66,18 +69,20 @@ prompt for 6 hours so new tabs don't re-nag. Update on demand at any time:
 dotfiles-update
 ```
 
-which runs `home-manager switch --refresh --flake github:dangreco/dotfiles#<profile>@<system>`.
+which runs `home-manager switch --refresh --flake github:dangreco/dotfiles#<profile>@<username>@<system>`.
 Local development builds (a dirty/checkout tree, `.#dan@...`) have no baked
 revision, so the check is a no-op and never nags.
 
 ## Profiles
 
-Every profile is generated for every supported system, keyed `<profile>@<system>`.
+Every profile is generated for every username x system, keyed
+`<profile>@<username>@<system>`. A profile can list several `usernames` so the
+same identity runs on hosts whose login user differs from the profile name.
 
-| Profile | Identity                    |
-| ------- | --------------------------- |
-| `dan`   | Dan Greco    |
-| `work`  | work identity (placeholder) |
+| Profile | Identity                    | Usernames        |
+| ------- | --------------------------- | ---------------- |
+| `dan`   | Dan Greco                   | `dan`            |
+| `work`  | work identity (placeholder) | `work`, `dangreco` |
 
 Supported systems: `x86_64-linux`, `aarch64-linux`, `aarch64-darwin`, `x86_64-darwin`.
 
@@ -101,8 +106,9 @@ profiles/              # identities: flip feature toggles, set values
    <name> = { module = ./profiles/<name>.nix; };
    ```
 
-   `username` defaults to the profile name; override with
-   `<name> = { username = "..."; module = ./profiles/<name>.nix; };`.
+   `usernames` defaults to `[ "<name>" ]`; list every login user the profile
+   may run under with
+   `<name> = { module = ./profiles/<name>.nix; usernames = [ "..." "..." ]; };`.
 
 ## Add a feature
 
