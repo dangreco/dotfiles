@@ -22,7 +22,6 @@ let
   };
 in
 {
-  imports = [ ./adwaita.nix ];
   options.features.zed = {
     enable = lib.mkEnableOption "the Zed code editor (native self-updating install)";
 
@@ -44,14 +43,15 @@ in
           package = null; # installed + kept updated by Zed's own installer, not Nix
           userSettings = lib.recursiveUpdate {
             auto_update = true;
-            ui_font_family = "Adwaita Sans";
-            buffer_font_family = "Adwaita Mono";
+            ui_font_family = "Inter";
+            buffer_font_family = "JetBrains Mono";
             rounded_selection = false;
-            # Track the desktop color scheme (GNOME light/dark) via the bundled theme.
+
+            icon_theme = "Catppuccin Latte";
             theme = {
               mode = "system";
-              light = "Adwaita Light";
-              dark = "Adwaita Dark";
+              light = "Catppuccin Latte";
+              dark = "Catppuccin Mocha";
             };
 
             cursor_shape = "bar";
@@ -74,6 +74,8 @@ in
               html = true;
               nix = true;
               toml = true;
+              catppuccin = true;
+              catppuccin-icons = true;
             };
 
             project_panel = {
@@ -120,11 +122,10 @@ in
       }
 
       (lib.mkIf pkgs.stdenv.isLinux {
-        # Adwaita fonts — HM `fonts.fontconfig` is Linux-only; on macOS the
-        # Adwaita Sans/Mono families just fall back until a font cask is added.
         fonts.fontconfig.enable = true;
         home.packages = with pkgs; [
-          adwaita-fonts
+          inter
+          jetbrains-mono
         ];
 
         systemd.user.services.zed-install = {
